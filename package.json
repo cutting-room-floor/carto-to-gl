@@ -1,0 +1,21 @@
+{
+  "name": "carto-to-gl",
+  "version": "1.0.0",
+  "description": "converts cartocss to gl",
+  "main": "index.js",
+  "scripts": {
+    "test": "tape test.js"
+  },
+  "keywords": [
+    "cartocss",
+    "gl"
+  ],
+  "author": "Tom MacWright",
+  "license": "ISC",
+  "dependencies": {
+    "carto": "^0.14.1"
+  },
+  "devDependencies": {
+    "tape": "^4.0.0"
+  }
+}
