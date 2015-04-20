@@ -13,7 +13,8 @@
   "author": "Tom MacWright",
   "license": "ISC",
   "dependencies": {
-    "carto": "^0.14.1"
+    "carto": "^0.14.1",
+    "underscore": "^1.8.3"
   },
   "devDependencies": {
     "tape": "^4.0.0"
