@@ -1,5 +1,6 @@
 var _ = require('underscore');
 var carto = require('carto');
+var layerToGL = require('./layer_to_gl.js');
 
 carto.Renderer = function Renderer(env, options) {
     this.env = env || {};
@@ -48,11 +49,8 @@ carto.Renderer.prototype.renderMSS = function render(data) {
         rule = sorted[k];
         style_name = 'style' + (rule.attachment !== '__default__' ? '-' + rule.attachment : '');
         styles.push(style_name);
-        var bench_name = '\tStyle "'+style_name+'" (#'+k+') toXML';
-        if (env.benchmark) console.time(bench_name);
         // env.effects can be modified by this call
-        output.push(carto.tree.StyleXML(style_name, rule.attachment, rule, env));
-        if (env.benchmark) console.timeEnd(bench_name);
+        output.push(layerToGL(carto.tree.StyleXML(style_name, rule.attachment, rule, env)));
     }
     if (env.benchmark) console.timeEnd('Total Style generation');
     if (env.errors) throw env.errors;
@@ -130,7 +128,7 @@ carto.Renderer.prototype.render = function render(m) {
             style_name = l.name + (rule.attachment !== '__default__' ? '-' + rule.attachment : '');
 
             // env.effects can be modified by this call
-            var styleXML = carto.tree.StyleGL(style_name, rule.attachment, rule, env);
+            var styleXML = layerToGL(carto.tree.StyleGL(style_name, rule.attachment, rule, env));
 
             if (styleXML) {
                 output.layers.push(styleXML);

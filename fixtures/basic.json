@@ -2,23 +2,12 @@
   "layers": [
     {
       "id": "world",
-      "rules": [
-        [
-          [
-            [
-              "LineSymbolizer",
-              [
-                "stroke",
-                "#ffffff"
-              ],
-              [
-                "stroke-width",
-                "3"
-              ]
-            ]
-          ]
-        ]
-      ]
+      "paint": {
+        "line-color": "#ffffff",
+        "line-width": "3",
+        "fill-color": "#ff0000"
+      },
+      "layout": {}
     }
   ],
   "sources": [
