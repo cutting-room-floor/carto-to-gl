@@ -90,8 +90,6 @@ carto.Renderer.prototype.render = function render(m) {
         output.sources.push(carto.tree.LayerGL(l, styles));
     }
 
-    var map_properties = getMapProperties(m, definitions, env);
-
     if (env.errors) throw env.errors;
 
     // assign sources to layers

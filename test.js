@@ -2,24 +2,30 @@ var test = require('tape'),
     _ = require('underscore'),
     fs = require('fs'),
     path = require('path'),
+    yaml = require('js-yaml'),
     togl = require('./');
 
-fixture(test, 'fixtures/basic.mml');
+// fixture(test, 'fixtures/basic.mml', 'fixtures/basic.json');
+fixture(test, 'node_modules/mapbox-studio-streets-basic/project.yml', 'fixtures/streets.json');
 
 function helperMML(file) {
-    var mml = JSON.parse(fs.readFileSync(file, 'utf-8'));
-    mml.Stylesheet = _(mml.Stylesheet).map(function(s) {
+    if (file.match(/json$/)) {
+        var mml = JSON.parse(fs.readFileSync(file, 'utf-8'));
+    } else {
+        var mml = yaml.load(fs.readFileSync(file, 'utf-8'));
+    }
+    mml.Stylesheet = _(mml.Stylesheet || mml.styles).map(function(s) {
         return {
             id: s,
             data: fs.readFileSync(path.join(path.dirname(file), s), 'utf-8')
         };
     });
+    mml.Layer = mml.Layer || [];
     return mml;
 }
 
-function fixture(t, filename) {
+function fixture(t, filename, outputFilename) {
     t.test(filename, function(tt) {
-        var outputFilename = filename.replace('.mml', '.json');
         var data = helperMML(filename);
         var result = new togl.Renderer({
             filename: filename,

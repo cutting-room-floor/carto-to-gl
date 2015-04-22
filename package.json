@@ -14,9 +14,11 @@
   "license": "ISC",
   "dependencies": {
     "carto": "https://github.com/mapbox/carto/archive/low-level.tar.gz",
+    "js-yaml": "^3.2.7",
     "underscore": "^1.8.3"
   },
   "devDependencies": {
+    "mapbox-studio-streets-basic": "^6.0.1",
     "tape": "^4.0.0"
   }
 }
