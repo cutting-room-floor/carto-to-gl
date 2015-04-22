@@ -4,10 +4,11 @@
     {
       "id": "world-0-0-0",
       "paint": {
-        "line-color": "#ffffff",
+        "line-color": "#000000",
         "line-width": "3"
       },
       "layout": {},
+      "minzoom": 11,
       "source": "world"
     },
     {
@@ -16,6 +17,26 @@
         "fill-color": "#ff0000"
       },
       "layout": {},
+      "minzoom": 11,
+      "source": "world"
+    },
+    {
+      "id": "world-0-1-0",
+      "paint": {
+        "line-color": "#ffffff",
+        "line-width": "3"
+      },
+      "layout": {},
+      "maxzoom": 11,
+      "source": "world"
+    },
+    {
+      "id": "world-0-1-1",
+      "paint": {
+        "fill-color": "#ff0000"
+      },
+      "layout": {},
+      "maxzoom": 11,
       "source": "world"
     }
   ],

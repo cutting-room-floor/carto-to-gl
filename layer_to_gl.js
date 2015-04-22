@@ -20,6 +20,10 @@ module.exports = function(layer) {
                     }
                 });
                 out.__original__layer = layer.id;
+                if (symbolizer.zoom) {
+                    if (symbolizer.zoom.minzoom) out.minzoom = symbolizer.zoom.minzoom;
+                    if (symbolizer.zoom.maxzoom) out.maxzoom = symbolizer.zoom.maxzoom;
+                }
                 out.id = layer.id + [,i,j,k].join('-');
                 layers.push(out);
             });
