@@ -5,11 +5,11 @@ var equiv = {
 };
 
 module.exports = function(layer) {
-    var out = { id: layer.id, paint: {}, layout: {} };
-    layer.rules.forEach(function(group) {
-        group.forEach(function(subgroup) {
-            subgroup.forEach(function(symbolizer) {
-                console.log(symbolizer);
+    var layers = [];
+    layer.rules.forEach(function(group, i) {
+        group.forEach(function(subgroup, j) {
+            subgroup.forEach(function(symbolizer, k) {
+                var out = { id: layer.id, paint: {}, layout: {} };
                 symbolizer.properties.forEach(function(prop) {
                     try {
                         var gltype = equiv[symbolizer.symbolizer + '/' + prop[0]].split('/');
@@ -19,9 +19,11 @@ module.exports = function(layer) {
                         console.log('no equivalent found for' + symbolizer.symbolizer + '/' + prop[0]);
                     }
                 });
+                out.__original__layer = layer.id;
+                out.id = layer.id + [,i,j,k].join('-');
+                layers.push(out);
             });
         });
     });
-    out.id = layer.id;
-    return out;
+    return layers;
 };

@@ -1,13 +1,22 @@
 {
+  "version": 7,
   "layers": [
     {
-      "id": "world",
+      "id": "world-0-0-0",
       "paint": {
         "line-color": "#ffffff",
-        "line-width": "3",
+        "line-width": "3"
+      },
+      "layout": {},
+      "source": "world"
+    },
+    {
+      "id": "world-0-0-1",
+      "paint": {
         "fill-color": "#ff0000"
       },
-      "layout": {}
+      "layout": {},
+      "source": "world"
     }
   ],
   "sources": [

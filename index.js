@@ -9,55 +9,6 @@ carto.Renderer = function Renderer(env, options) {
 };
 
 /**
- * Prepare a MSS document (given as an string) into a
- * XML Style fragment (mostly useful for debugging)
- *
- * @param {String} data the mss contents as a string.
- */
-carto.Renderer.prototype.renderMSS = function render(data) {
-    // effects is a container for side-effects, which currently
-    // are limited to FontSets.
-    var env = _(this.env).defaults({
-        benchmark: false,
-        validation_data: false,
-        effects: []
-    });
-
-    carto.tree.Reference.setVersion(this.options.mapnik_version);
-
-    var output = [];
-    var styles = [];
-
-    if (env.benchmark) console.time('Parsing MSS');
-    var parser = (carto.Parser(env)).parse(data);
-    if (env.benchmark) console.timeEnd('Parsing MSS');
-
-    if (env.benchmark) console.time('Rule generation');
-    var rule_list = parser.toList(env);
-    if (env.benchmark) console.timeEnd('Rule generation');
-
-    if (env.benchmark) console.time('Rule inheritance');
-    var rules = inheritDefinitions(rule_list, env);
-    if (env.benchmark) console.timeEnd('Rule inheritance');
-
-    if (env.benchmark) console.time('Style sort');
-    var sorted = sortStyles(rules,env);
-    if (env.benchmark) console.timeEnd('Style sort');
-
-    if (env.benchmark) console.time('Total Style generation');
-    for (var k = 0, rule, style_name; k < sorted.length; k++) {
-        rule = sorted[k];
-        style_name = 'style' + (rule.attachment !== '__default__' ? '-' + rule.attachment : '');
-        styles.push(style_name);
-        // env.effects can be modified by this call
-        output.push(layerToGL(carto.tree.StyleXML(style_name, rule.attachment, rule, env)));
-    }
-    if (env.benchmark) console.timeEnd('Total Style generation');
-    if (env.errors) throw env.errors;
-    return output;
-};
-
-/**
  * Prepare a MML document (given as an object) into a
  * fully-localized XML file ready for Mapnik2 consumption
  *
@@ -76,6 +27,7 @@ carto.Renderer.prototype.render = function render(m) {
     carto.tree.Reference.setVersion(this.options.mapnik_version);
 
     var output = {
+        version: 7,
         layers: [],
         sources: []
     };
@@ -127,11 +79,10 @@ carto.Renderer.prototype.render = function render(m) {
             rule = sorted[k];
             style_name = l.name + (rule.attachment !== '__default__' ? '-' + rule.attachment : '');
 
-            // env.effects can be modified by this call
             var styleXML = layerToGL(carto.tree.StyleGL(style_name, rule.attachment, rule, env));
 
             if (styleXML) {
-                output.layers.push(styleXML);
+                output.layers = output.layers.concat(styleXML);
                 styles.push(style_name);
             }
         }
@@ -139,14 +90,22 @@ carto.Renderer.prototype.render = function render(m) {
         output.sources.push(carto.tree.LayerGL(l, styles));
     }
 
-    //output.unshift(env.effects.map(function(e) {
-    //    return e.toXML(env);
-    //}).join('\n'));
-
     var map_properties = getMapProperties(m, definitions, env);
 
-    // Exit on errors.
     if (env.errors) throw env.errors;
+
+    // assign sources to layers
+    output.sources.forEach(function(source) {
+        source.styles.forEach(function(layer) {
+            output.layers.forEach(function(l) {
+                if (l.__original__layer === layer) {
+                    l.source = source.id;
+                    delete l.__original__layer;
+                }
+            });
+
+        });
+    });
 
     return output;
 };
