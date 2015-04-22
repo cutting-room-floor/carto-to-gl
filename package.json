@@ -13,7 +13,7 @@
   "author": "Tom MacWright",
   "license": "ISC",
   "dependencies": {
-    "carto": "^0.14.1",
+    "carto": "https://github.com/mapbox/carto/archive/low-level.tar.gz",
     "underscore": "^1.8.3"
   },
   "devDependencies": {

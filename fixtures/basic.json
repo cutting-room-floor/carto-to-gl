@@ -1,18 +1,37 @@
 {
-  "sources": {
-    "world": {
-      "type": "geojson",
-      "data": "http://tilemill-data.s3.amazonaws.com/district.geojson"
-    }
-  },
   "layers": [
     {
-      "layout": {},
-      "paint": {
-        "line-color": "#ffffff",
-        "line-width": "3"
-      },
-      "type": "line"
+      "id": "world",
+      "rules": [
+        [
+          [
+            [
+              "LineSymbolizer",
+              [
+                "stroke",
+                "#ffffff"
+              ],
+              [
+                "stroke-width",
+                "3"
+              ]
+            ]
+          ]
+        ]
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "world",
+      "styles": [
+        "world"
+      ],
+      "datasource": {
+        "file": "http://tilemill-data.s3.amazonaws.com/district.geojson",
+        "type": "ogr",
+        "layer": "OGRGeoJSON"
+      }
     }
   ]
 }
